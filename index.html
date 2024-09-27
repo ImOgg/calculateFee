@@ -96,16 +96,18 @@
 </head>
 
 <body>
-     <!-- 遊艇計算卡片 -->
-     <div class="card">
+    <!-- 遊艇計算卡片 -->
+    <div class="card">
         <div class="card-title">遊艇計算</div>
         <label>
             預定進港時間
-            <input type="date" id="id_scheduled_arrival" required onchange="checkDateValidity('id_scheduled_arrival', 'id_scheduled_departure')">
+            <input type="date" id="id_scheduled_arrival" required
+                onchange="checkDateValidity('id_scheduled_arrival', 'id_scheduled_departure')">
         </label>
         <label>
             預定出港時間
-            <input type="date" id="id_scheduled_departure" required onchange="checkDateValidity('id_scheduled_arrival', 'id_scheduled_departure')">
+            <input type="date" id="id_scheduled_departure" required
+                onchange="checkDateValidity('id_scheduled_arrival', 'id_scheduled_departure')">
         </label>
         <label>
             選擇停泊碼頭
@@ -121,7 +123,7 @@
         </label>
         <label id="ship_width_container">
             船舶寬度(呎)
-            <input type="number" id="ship_width" placeholder="輸入船舶全寬" value="0">
+            <input type="number" id="ship_width" placeholder="輸入船舶全寬" value="0" max="5">
         </label>
         <button onclick="calculateFee()">計算費用</button>
         <div class="result" id="result"></div>
@@ -132,11 +134,13 @@
         <div class="card-title">漁船計算</div>
         <label>
             預定進港時間
-            <input type="date" id="id_scheduled_arrival2" required onchange="checkDateValidity('id_scheduled_arrival2', 'id_scheduled_departure2')">
+            <input type="date" id="id_scheduled_arrival2" required
+                onchange="checkDateValidity('id_scheduled_arrival2', 'id_scheduled_departure2')">
         </label>
         <label>
             預定出港時間
-            <input type="date" id="id_scheduled_departure2" required onchange="checkDateValidity('id_scheduled_arrival2', 'id_scheduled_departure2')">
+            <input type="date" id="id_scheduled_departure2" required
+                onchange="checkDateValidity('id_scheduled_arrival2', 'id_scheduled_departure2')">
         </label>
         <label>
             選擇船型
@@ -165,28 +169,29 @@
             <ul>
                 <li>浮動碼頭以船席計算：</li>
                 <ul>
-                    <li>（一）十公尺：新臺幣四百元。</li>
-                    <li>（二）十五公尺：新臺幣六百元。</li>
-                    <li>（三）十八公尺：新臺幣七百二十元。</li>
-                    <li>（四）二十公尺：新臺幣八百元。</li>
-                    <li>（五）三十公尺：新臺幣一千五百元。</li>
+                    <li>（一）10公尺：新臺幣400元。</li>
+                    <li>（二）15公尺：新臺幣600元。</li>
+                    <li>（三）18公尺：新臺幣720元。</li>
+                    <li>（四）20公尺：新臺幣800元。</li>
+                    <li>（五）30公尺：新臺幣1,500元。</li>
                 </ul>
-                <li>以船舶平行岸壁碼頭停泊者，以船舶全長（Length Overall；LOA）計算，且長度以公尺為最小單位，未滿一公尺者，以一公尺計：</li>
+                <li>以船舶平行岸壁碼頭停泊者，以船舶全長（Length Overall；LOA）計算，且長度以公尺為最小單位，未滿1公尺者，以1公尺計：</li>
                 <ul>
-                    <li>（一）十公尺以下：新臺幣二百元。</li>
-                    <li>（二）超過十公尺至二十公尺以下：每公尺新臺幣二十元。</li>
-                    <li>（三）超過二十公尺至三十公尺以下：每公尺新臺幣二十五元。</li>
-                    <li>（四）超過三十公尺至五十公尺以下：每公尺新臺幣三十五元。</li>
-                    <li>（五）超過五十公尺：每公尺新臺幣五十元。</li>
+                    <li>（一）10公尺以下：新臺幣200元。</li>
+                    <li>（二）超過10公尺至20公尺以下：每公尺新臺幣20元。</li>
+                    <li>（三）超過20公尺至30公尺以下：每公尺新臺幣25元。</li>
+                    <li>（四）超過30公尺至50公尺以下：每公尺新臺幣35元。</li>
+                    <li>（五）超過50公尺：每公尺新臺幣50元。</li>
                 </ul>
-                <li>以船舶垂直岸壁碼頭停泊者，以船寬五公尺以下為限，每船新臺幣一百元。船寬五公尺以上，每船新臺幣一百元。</li>
+                <li>以船舶垂直岸壁碼頭停泊者，以船寬5公尺以下為限，每船新臺幣100元。</li>
+                <li>前項收費，其停泊未滿1日者，以1日計。</li>
             </ul>
-            <p><strong>漁船停泊費：</strong><br>每噸：新臺幣四元。</p>
+            <p><strong>漁船停泊費：</strong><br>每噸：新臺幣4元。</p>
         </div>
     </div>
     <script>
-         // 檢查起始日期和結束日期是否有效
-         function checkDateValidity(startId, endId) {
+        // 檢查起始日期和結束日期是否有效
+        function checkDateValidity(startId, endId) {
             const startDate = document.getElementById(startId).value;
             const endDate = document.getElementById(endId).value;
 
@@ -240,10 +245,14 @@
                 alert('請輸入有效的船舶全長');
                 return;
             }
-            if (isNaN(shipWidth) || shipWidth < 0) {
+            if (isNaN(shipWidth) || shipWidth < 0 || shipWidth > 5) {
                 alert('請輸入有效的船舶寬度');
                 return;
+            }else if( shipWidth > 5){
+                alert('船舶寬度最大值為5');
+                return;
             }
+
             if (!scheduledArrival || !scheduledDeparture) {
                 alert('請輸入有效的進港和出港日期');
                 return;
