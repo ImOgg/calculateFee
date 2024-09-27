@@ -141,11 +141,16 @@
         <label>
             選擇船型
             <select id="ship_ct">
-                <option value="CT4">CT4：漁船噸數為50噸以上未滿100噸</option>
-                <option value="CT3">CT3：漁船噸數為20噸以上未滿50噸</option>
-                <option value="CT2">CT2：漁船噸數為10噸以上未滿20噸</option>
-                <option value="CT1">CT1：漁船噸數為5噸以上未滿10噸</option>
                 <option value="CT0">CT0：漁船噸數為5噸以下</option>
+                <option value="CT1">CT1：漁船噸數為5噸以上未滿10噸</option>
+                <option value="CT2">CT2：漁船噸數為10噸以上未滿20噸</option>
+                <option value="CT3">CT3：漁船噸數為20噸以上未滿50噸</option>
+                <option value="CT4">CT4：漁船噸數為50噸以上未滿100噸</option>
+                <option value="CT5">CT5：漁船噸數為100噸以上未滿200噸</option>
+                <option value="CT6">CT6：漁船噸數為200噸以上未滿500噸</option>
+                <option value="CT7">CT7：漁船噸數為500噸以上未滿1000噸</option>
+                <option value="CT8">CT8：漁船噸數為1000噸以上未滿2000噸</option>
+                <option value="CT9">CT9：漁船噸數為2000噸以上未滿5000噸</option>
             </select>
         </label>
         <button onclick="calculateFee2()">計算費用</button>
@@ -176,7 +181,7 @@
                 </ul>
                 <li>以船舶垂直岸壁碼頭停泊者，以船寬五公尺以下為限，每船新臺幣一百元。船寬五公尺以上，每船新臺幣一百元。</li>
             </ul>
-            <p><strong>漁船停泊費：</strong><br>每噸：新臺幣四百元。</p>
+            <p><strong>漁船停泊費：</strong><br>每噸：新臺幣四元。</p>
         </div>
     </div>
     <script>
@@ -322,7 +327,28 @@
             const departureDate = new Date(scheduledDeparture);
             const timeDiff = departureDate - arrivalDate;
             const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1; // 計算天數，向上取整
+
             switch (shipCt) {
+                case 'CT9':
+                    dailyFee1 = 2000 * 4;
+                    dailyFee2 = 5000 * 4;
+                    break;
+                case 'CT8':
+                    dailyFee1 = 1000 * 4;
+                    dailyFee2 = 2000 * 4;
+                    break;
+                case 'CT7':
+                    dailyFee1 = 500 * 4;
+                    dailyFee2 = 1000 * 4;
+                    break;
+                case 'CT6':
+                    dailyFee1 = 200 * 4;
+                    dailyFee2 = 500 * 4;
+                    break;
+                case 'CT5':
+                    dailyFee1 = 100 * 4;
+                    dailyFee2 = 200 * 4;
+                    break;
                 case 'CT4':
                     dailyFee1 = 50 * 4;
                     dailyFee2 = 100 * 4;
