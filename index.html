@@ -101,11 +101,11 @@
         <div class="card-title">遊艇計算</div>
         <label>
             預定進港時間
-            <input type="date" id="id_scheduled_arrival" required>
+            <input type="date" id="id_scheduled_arrival" required onchange="checkDateValidity('id_scheduled_arrival', 'id_scheduled_departure')">
         </label>
         <label>
             預定出港時間
-            <input type="date" id="id_scheduled_departure" required>
+            <input type="date" id="id_scheduled_departure" required onchange="checkDateValidity('id_scheduled_arrival', 'id_scheduled_departure')">
         </label>
         <label>
             選擇停泊碼頭
@@ -132,11 +132,11 @@
         <div class="card-title">漁船計算</div>
         <label>
             預定進港時間
-            <input type="date" id="id_scheduled_arrival2" required>
+            <input type="date" id="id_scheduled_arrival2" required onchange="checkDateValidity('id_scheduled_arrival2', 'id_scheduled_departure2')">
         </label>
         <label>
             預定出港時間
-            <input type="date" id="id_scheduled_departure2" required>
+            <input type="date" id="id_scheduled_departure2" required onchange="checkDateValidity('id_scheduled_arrival2', 'id_scheduled_departure2')">
         </label>
         <label>
             選擇船型
@@ -180,6 +180,22 @@
         </div>
     </div>
     <script>
+         // 檢查起始日期和結束日期是否有效
+         function checkDateValidity(startId, endId) {
+            const startDate = document.getElementById(startId).value;
+            const endDate = document.getElementById(endId).value;
+
+            if (startDate && endDate) {
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+
+                if (start > end) {
+                    alert('離港日期不能早於進港日期！');
+                    document.getElementById(startId).value = ''; // 清空起始日期或重設
+                    document.getElementById(endId).value = ''; // 清空結束日期或重設
+                }
+            }
+        }
         const dockType = document.getElementById('dock_type').value;
         const ship_length_container = document.getElementById('ship_length_container');
         const ship_width_container = document.getElementById('ship_width_container');
