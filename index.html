@@ -239,6 +239,10 @@
             document.getElementById('id_scheduled_departure').setAttribute('min', today);
             document.getElementById('id_scheduled_arrival2').setAttribute('min', today);
             document.getElementById('id_scheduled_departure2').setAttribute('min', today);
+            document.getElementById('id_scheduled_arrival').min = today;
+            document.getElementById('id_scheduled_departure').min = today;
+            document.getElementById('id_scheduled_arrival2').min = today;
+            document.getElementById('id_scheduled_departure2').min = today;
         }
         document.getElementById('id_scheduled_arrival').addEventListener('input', function () {
             const today = new Date().toISOString().split('T')[0];
