@@ -226,10 +226,18 @@
                 ship_width_container.style.display = 'block';
             }
         }
-
+        // 設置日期的最小值為今天
+        function setMinDate() {
+            const today = new Date().toISOString().split('T')[0]; // 獲取今天的日期（格式為 yyyy-mm-dd）
+            document.getElementById('id_scheduled_arrival').setAttribute('min', today);
+            document.getElementById('id_scheduled_departure').setAttribute('min', today);
+            document.getElementById('id_scheduled_arrival2').setAttribute('min', today);
+            document.getElementById('id_scheduled_departure2').setAttribute('min', today);
+        }
         // 頁面加載時，初始狀態設置
         window.onload = function () {
             show_width_length(); // 頁面加載時先執行一次函數來設置初始狀態
+            setMinDate()
         }
         function calculateFee() {
             console.log('Calculating fee...'); // 檢查函數是否觸發
