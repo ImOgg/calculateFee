@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>試算</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 50px;
+        }
+
+        label {
+            display: flex;
+            flex-direction: column;
+            margin: 10px 0;
+        }
+
+        input,
+        select {
+            padding: 5px;
+            margin-top: 5px;
+        }
+
+        button {
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        遊艇計算
+        <label>
+            預定進港時間
+            <input type="date" name="scheduled_arrival" placeholder="預定到達日期" id="id_scheduled_arrival" required>
+        </label>
+        <label>
+            預定出港時間
+            <input type="date" name="scheduled_departure" placeholder="預定離港日期" id="id_scheduled_departure" required>
+        </label>
+        <label>
+            選擇停泊碼頭
+            <select id="dock_type" onchange="show_width_length()">
+                <option value="vertical">垂直岸壁碼頭</option>
+                <option value="floating">浮動碼頭</option>
+                <option value="parallel">平行岸壁碼頭</option>
+            </select>
+        </label>
+        <label id="ship_length_container">
+            船舶全長(呎)
+            <input type="number" id="ship_length" placeholder="輸入船舶全長" value="0">
+        </label>
+        <label id="ship_width_container">
+            船舶寬度(呎)
+            <input type="number" id="ship_width" placeholder="輸入船舶全長" value="0">
+        </label>
+
+        <button onclick="calculateFee()">計算費用</button>
+
+        <div class="result" id="result"></div>
+    </div>
+    <div>
+        漁船計算
+        <label>
+            預定進港時間
+            <input type="date" name="scheduled_arrival2" placeholder="預定到達日期" id="id_scheduled_arrival2" required>
+        </label>
+        <label>
+            預定出港時間
+            <input type="date" name="scheduled_departure2" placeholder="預定離港日期" id="id_scheduled_departure2" required>
+        </label>
+        <select name="ship-_ct" id="ship_ct">
+            <option value="CT4">CT4：漁船噸數為50噸以上未滿100噸</option>
+            <option value="CT3">CT3：漁船噸數為 20噸以上未滿50噸</option>
+            <option value="CT2">CT2：漁船噸數為10噸以上未滿20噸</option>
+            <option value="CT1">CT1：漁船噸數為5噸以上未滿10噸</option>
+            <option value="CT0">CT0：漁船噸數為5噸以下</option>
+        </select>
+        <button onclick="calculateFee2()">計算費用</button>
+
+        <div class="result2" id="result2"></div>
+    </div>
+    <script>
+        const dockType = document.getElementById('dock_type').value;
+        const ship_length_container = document.getElementById('ship_length_container');
+        const ship_width_container = document.getElementById('ship_width_container');
+        function show_width_length() {
+            // 在函數內部重新獲取選擇的值
+            const dockType = document.getElementById('dock_type').value;
+            const ship_length_container = document.getElementById('ship_length_container');
+            const ship_width_container = document.getElementById('ship_width_container');
+
+            console.log('Dock Type:', dockType); // 用於檢查選擇值是否正確更新
+
+            // 根據選擇的碼頭類型來顯示或隱藏對應的欄位
+            if (dockType === 'floating' || dockType === 'parallel') {
+                ship_length_container.style.display = 'block';
+                ship_width_container.style.display = 'none';
+            } else if (dockType === 'vertical') {
+                ship_length_container.style.display = 'none';
+                ship_width_container.style.display = 'block';
+            }
+        }
+
+        // 頁面加載時，初始狀態設置
+        window.onload = function () {
+            show_width_length(); // 頁面加載時先執行一次函數來設置初始狀態
+        }
+        function calculateFee() {
+            console.log('Calculating fee...'); // 檢查函數是否觸發
+            // 獲取輸入值
+            const shipLength = parseFloat(document.getElementById('ship_length').value);
+            const shipWidth = parseFloat(document.getElementById('ship_width').value);
+            const dockType = document.getElementById('dock_type').value;
+            const scheduledArrival = document.getElementById('id_scheduled_arrival').value;
+            const scheduledDeparture = document.getElementById('id_scheduled_departure').value;
+
+            // 檢查有效輸入
+            if (isNaN(shipLength) || shipLength < 0) {
+                alert('請輸入有效的船舶全長');
+                return;
+            }
+            if (isNaN(shipWidth) || shipWidth < 0) {
+                alert('請輸入有效的船舶寬度');
+                return;
+            }
+            if (!scheduledArrival || !scheduledDeparture) {
+                alert('請輸入有效的進港和出港日期');
+                return;
+            }
+
+            // 計算天數差異
+            const arrivalDate = new Date(scheduledArrival);
+            const departureDate = new Date(scheduledDeparture);
+            const timeDiff = departureDate - arrivalDate;
+            const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1; // 計算天數，向上取整
+
+            if (days <= 0) {
+                alert('離港日期必須在進港日期之後');
+                return;
+            }
+
+            let dailyFee = 0; // 每日費用
+
+            // 根據碼頭類型進行計算
+            switch (dockType) {
+                case 'floating':
+                    if (shipLength <= 10) {
+                        dailyFee = 400;
+                    } else if (shipLength <= 15) {
+                        dailyFee = 600;
+                    } else if (shipLength <= 18) {
+                        dailyFee = 720;
+                    } else if (shipLength <= 20) {
+                        dailyFee = 800;
+                    } else if (shipLength <= 30) {
+                        dailyFee = 1500;
+                    } else {
+                        dailyFee = 1500 + (shipLength - 30) * 50; // 假設超過30呎，每增加1呎，費用增加50元
+                    }
+                    break;
+
+                case 'parallel':
+                    if (shipLength <= 10) {
+                        dailyFee = 200;
+                    } else if (shipLength <= 20) {
+                        dailyFee = 200 + (shipLength - 10) * 20;
+                    } else if (shipLength <= 30) {
+                        dailyFee = 400 + (shipLength - 20) * 25;
+                    } else if (shipLength <= 50) {
+                        dailyFee = 650 + (shipLength - 30) * 35;
+                    } else {
+                        dailyFee = 1350 + (shipLength - 50) * 50;
+                    }
+                    break;
+
+                case 'vertical':
+                    if (shipWidth <= 5) {
+                        dailyFee = 100;
+                    } else {
+                        dailyFee = 100 + Math.ceil(shipWidth / 5) * 100; // 每增加 5 公尺，費用增加 100 元
+                    }
+                    break;
+
+                default:
+                    dailyFee = 0;
+            }
+
+            // 總費用計算
+            const totalDaysFee = days * dailyFee;
+
+            // 顯示結果
+            document.getElementById('result').innerText = `計算結果：新臺幣 ${totalDaysFee} 元（每日費用：${dailyFee} 元，停泊 ${days} 天）`;
+        }
+
+        function calculateFee2() {
+            const scheduledArrival = document.getElementById('id_scheduled_arrival2').value;
+            const scheduledDeparture = document.getElementById('id_scheduled_departure2').value;
+            const shipCt = document.getElementById('ship_ct').value;
+            if (!scheduledArrival || !scheduledDeparture) {
+                alert('請輸入有效的進港和出港日期');
+                return;
+            }
+            console.log(shipCt);
+            // 計算天數差異
+            const arrivalDate = new Date(scheduledArrival);
+            const departureDate = new Date(scheduledDeparture);
+            const timeDiff = departureDate - arrivalDate;
+            const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1; // 計算天數，向上取整
+            switch (shipCt) {
+                case 'CT4':
+                    dailyFee1 = 50 * 4;
+                    dailyFee2 = 100 * 4;
+                    break;
+
+                case 'CT3':
+                    dailyFee1 = 20 * 4;
+                    dailyFee2 = 50 * 4;
+                    break;
+
+                case 'CT2':
+                    dailyFee1 = 10 * 4;
+                    dailyFee2 = 20 * 4;
+                    break;
+                case 'CT1':
+                    dailyFee1 = 5 * 4;
+                    dailyFee2 = 10 * 4;
+                    break;
+                case 'CT0':
+                    dailyFee1 = 0 * 4;
+                    dailyFee2 = 5 * 4;
+                    break;
+                default:
+                    dailyFee = 0;
+            }
+            const totalDaysFee1 = days * dailyFee1;
+            const totalDaysFee2 = days * dailyFee2;
+            document.getElementById('result2').innerText = `計算結果：新臺幣 ${totalDaysFee1}~${totalDaysFee2} 元（每日費用：${dailyFee1} ~ ${dailyFee2}元，停泊 ${days} 天）`;
+        }
+    </script>
+</body>
+
+</html>
