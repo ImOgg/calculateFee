@@ -6,56 +6,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>試算</title>
     <style>
+        /* 基本樣式設置 */
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            margin-top: 50px;
+            background-color: #f5f5f5;
+            font-family: 'Roboto', sans-serif;
+            padding: 20px;
         }
 
+        /* 卡片樣式 */
+        .card {
+            background: #ffffff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        /* 標籤樣式 */
         label {
             display: flex;
             flex-direction: column;
             margin: 10px 0;
+            color: #333;
         }
 
+        /* 輸入框和選擇框樣式 */
         input,
         select {
-            padding: 5px;
+            padding: 10px;
             margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
         }
 
+        /* 按鈕樣式 */
         button {
-            margin: 20px 0;
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
         }
 
         button:hover {
             background-color: #0056b3;
         }
 
+        /* 結果樣式 */
         .result {
             margin-top: 20px;
             font-weight: bold;
+            font-size: 18px;
+            color: #007bff;
+        }
+
+        .result2 {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 18px;
+            color: #28a745;
+        }
+
+        /* 卡片標題樣式 */
+        .card-title {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        /* 內容區域樣式 */
+        .content {
+            margin-top: 10px;
+            color: #555;
+            line-height: 1.6;
         }
     </style>
 </head>
 
 <body>
-    <div>
-        遊艇計算
+     <!-- 遊艇計算卡片 -->
+     <div class="card">
+        <div class="card-title">遊艇計算</div>
         <label>
             預定進港時間
-            <input type="date" name="scheduled_arrival" placeholder="預定到達日期" id="id_scheduled_arrival" required>
+            <input type="date" id="id_scheduled_arrival" required>
         </label>
         <label>
             預定出港時間
-            <input type="date" name="scheduled_departure" placeholder="預定離港日期" id="id_scheduled_departure" required>
+            <input type="date" id="id_scheduled_departure" required>
         </label>
         <label>
             選擇停泊碼頭
@@ -71,33 +121,63 @@
         </label>
         <label id="ship_width_container">
             船舶寬度(呎)
-            <input type="number" id="ship_width" placeholder="輸入船舶全長" value="0">
+            <input type="number" id="ship_width" placeholder="輸入船舶全寬" value="0">
         </label>
-
         <button onclick="calculateFee()">計算費用</button>
-
         <div class="result" id="result"></div>
     </div>
-    <div>
-        漁船計算
+
+    <!-- 漁船計算卡片 -->
+    <div class="card">
+        <div class="card-title">漁船計算</div>
         <label>
             預定進港時間
-            <input type="date" name="scheduled_arrival2" placeholder="預定到達日期" id="id_scheduled_arrival2" required>
+            <input type="date" id="id_scheduled_arrival2" required>
         </label>
         <label>
             預定出港時間
-            <input type="date" name="scheduled_departure2" placeholder="預定離港日期" id="id_scheduled_departure2" required>
+            <input type="date" id="id_scheduled_departure2" required>
         </label>
-        <select name="ship-_ct" id="ship_ct">
-            <option value="CT4">CT4：漁船噸數為50噸以上未滿100噸</option>
-            <option value="CT3">CT3：漁船噸數為 20噸以上未滿50噸</option>
-            <option value="CT2">CT2：漁船噸數為10噸以上未滿20噸</option>
-            <option value="CT1">CT1：漁船噸數為5噸以上未滿10噸</option>
-            <option value="CT0">CT0：漁船噸數為5噸以下</option>
-        </select>
+        <label>
+            選擇船型
+            <select id="ship_ct">
+                <option value="CT4">CT4：漁船噸數為50噸以上未滿100噸</option>
+                <option value="CT3">CT3：漁船噸數為20噸以上未滿50噸</option>
+                <option value="CT2">CT2：漁船噸數為10噸以上未滿20噸</option>
+                <option value="CT1">CT1：漁船噸數為5噸以上未滿10噸</option>
+                <option value="CT0">CT0：漁船噸數為5噸以下</option>
+            </select>
+        </label>
         <button onclick="calculateFee2()">計算費用</button>
-
         <div class="result2" id="result2"></div>
+    </div>
+
+    <!-- 收費標準卡片 -->
+    <div class="card">
+        <div class="card-title">收費標準</div>
+        <div class="content">
+            <p><strong>第一類漁港遊艇停泊費收費標準</strong><br>遊艇停泊第一類漁港或各類船舶停泊第一類漁港遊艇泊區，其每日停泊費收費基準如下：</p>
+            <ul>
+                <li>浮動碼頭以船席計算：</li>
+                <ul>
+                    <li>（一）十公尺：新臺幣四百元。</li>
+                    <li>（二）十五公尺：新臺幣六百元。</li>
+                    <li>（三）十八公尺：新臺幣七百二十元。</li>
+                    <li>（四）二十公尺：新臺幣八百元。</li>
+                    <li>（五）三十公尺：新臺幣一千五百元。</li>
+                </ul>
+                <li>以船舶平行岸壁碼頭停泊者，以船舶全長（Length Overall；LOA）計算，且長度以公尺為最小單位，未滿一公尺者，以一公尺計：</li>
+                <ul>
+                    <li>（一）十公尺以下：新臺幣二百元。</li>
+                    <li>（二）超過十公尺至二十公尺以下：每公尺新臺幣二十元。</li>
+                    <li>（三）超過二十公尺至三十公尺以下：每公尺新臺幣二十五元。</li>
+                    <li>（四）超過三十公尺至五十公尺以下：每公尺新臺幣三十五元。</li>
+                    <li>（五）超過五十公尺：每公尺新臺幣五十元。</li>
+                </ul>
+                <li>以船舶垂直岸壁碼頭停泊者，以船寬五公尺以下為限，每船新臺幣一百元。船寬五公尺以上，每船新臺幣一百元。</li>
+            </ul>
+            <p><strong>漁船停泊費：</strong><br>每噸：新臺幣四百元。</p>
+        </div>
     </div>
     <script>
         const dockType = document.getElementById('dock_type').value;
