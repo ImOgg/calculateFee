@@ -234,10 +234,38 @@
             document.getElementById('id_scheduled_arrival2').setAttribute('min', today);
             document.getElementById('id_scheduled_departure2').setAttribute('min', today);
         }
+        document.getElementById('id_scheduled_arrival').addEventListener('input', function () {
+            const today = new Date().toISOString().split('T')[0];
+            if (this.value < today) {
+                alert('日期不能早於今天！');
+                this.value = today; // 如果日期小於今天，將日期重設為今天
+            }
+        });
+        document.getElementById('id_scheduled_departure').addEventListener('input', function () {
+            const today = new Date().toISOString().split('T')[0];
+            if (this.value < today) {
+                alert('日期不能早於今天！');
+                this.value = today; // 如果日期小於今天，將日期重設為今天
+            }
+        });
+        document.getElementById('id_scheduled_arrival2').addEventListener('input', function () {
+            const today = new Date().toISOString().split('T')[0];
+            if (this.value < today) {
+                alert('日期不能早於今天！');
+                this.value = today; // 如果日期小於今天，將日期重設為今天
+            }
+        });
+        document.getElementById('id_scheduled_departure2').addEventListener('input', function () {
+            const today = new Date().toISOString().split('T')[0];
+            if (this.value < today) {
+                alert('日期不能早於今天！');
+                this.value = today; // 如果日期小於今天，將日期重設為今天
+            }
+        });
         // 頁面加載時，初始狀態設置
         window.onload = function () {
             show_width_length(); // 頁面加載時先執行一次函數來設置初始狀態
-            setMinDate()
+            setMinDate();
         }
         function calculateFee() {
             console.log('Calculating fee...'); // 檢查函數是否觸發
@@ -256,7 +284,7 @@
             if (isNaN(shipWidth) || shipWidth < 0 || shipWidth > 5) {
                 alert('請輸入有效的船舶寬度');
                 return;
-            }else if( shipWidth > 5){
+            } else if (shipWidth > 5) {
                 alert('船舶寬度最大值為5');
                 return;
             }
