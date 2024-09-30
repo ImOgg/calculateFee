@@ -12,7 +12,14 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            background-color: #f5f5f5;
+            background-color: #2cbdfc;
+            background-image: url(./images/calculateFeeBG.png);
+            background-size: contain;
+            /* 讓背景圖片覆蓋整個畫面 */
+            background-position: top center;
+            /* 背景圖片居中 */
+            background-repeat: no-repeat;
+            /* 防止圖片重複 */
             font-family: 'Roboto', sans-serif;
             padding: 20px;
         }
@@ -98,13 +105,21 @@
             /* 移除項目符號 */
 
         }
+
+        /* 注意 */
+        .notice {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 18px;
+            color: #f06e72;
+        }
     </style>
 </head>
 
 <body>
     <!-- 遊艇計算卡片 -->
     <div class="card">
-        <div class="card-title">遊艇計算</div>
+        <div class="card-title">遊艇停泊費試算</div>
         <label>
             預定進港時間
             <input type="date" id="id_scheduled_arrival" required
@@ -133,11 +148,15 @@
         </label>
         <button onclick="calculateFee()">計算費用</button>
         <div class="result" id="result"></div>
+
+        <div class="notice">
+            ※本頁僅供試算參考,詳細正確金額,請依實際個案計算。
+        </div>
     </div>
 
     <!-- 漁船計算卡片 -->
     <div class="card">
-        <div class="card-title">漁船計算</div>
+        <div class="card-title">漁船停泊費試算</div>
         <label>
             預定進港時間
             <input type="date" id="id_scheduled_arrival2" required
@@ -165,6 +184,9 @@
         </label>
         <button onclick="calculateFee2()">計算費用</button>
         <div class="result2" id="result2"></div>
+        <div class="notice">
+            ※本頁僅供試算參考,詳細正確金額,請依實際個案計算。
+        </div>
     </div>
 
     <!-- 收費標準卡片 -->
